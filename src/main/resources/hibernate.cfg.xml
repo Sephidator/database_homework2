@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <!-- Database connection settings -->
+    <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/homework_2?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=true</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">Necloth112358</property>
+
+    <property name="show_sql">false</property>
+    <property name="format_sql">false</property>
+    <property name="hbm2ddl.auto">update</property>
+    <property name="current_session_context_class">jta</property>
+
+    <mapping class="entity.BasicPrice"/>
+    <mapping resource="entity/BasicPrice.hbm.xml"/>
+    <mapping class="entity.CallRecord"/>
+    <mapping resource="entity/CallRecord.hbm.xml"/>
+    <mapping class="entity.DomesticDataRecord"/>
+    <mapping resource="entity/DomesticDataRecord.hbm.xml"/>
+    <mapping class="entity.LocalDataRecord"/>
+    <mapping resource="entity/LocalDataRecord.hbm.xml"/>
+    <mapping class="entity.MessageRecord"/>
+    <mapping resource="entity/MessageRecord.hbm.xml"/>
+    <mapping class="entity.Orders"/>
+    <mapping resource="entity/Orders.hbm.xml"/>
+    <mapping class="entity.Plan"/>
+    <mapping resource="entity/Plan.hbm.xml"/>
+    <mapping class="entity.User"/>
+    <mapping resource="entity/User.hbm.xml"/>
+
+    <!-- DB schema will be updated if needed -->
+    <!-- <property name="hbm2ddl.auto">update</property> -->
+  </session-factory>
+</hibernate-configuration>

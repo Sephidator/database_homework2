@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="entity.DomesticDataRecord" table="domestic_data_record" schema="homework_2">
+        <id name="id" column="id"/>
+        <property name="sendTime" column="sendTime"/>
+        <property name="amount" column="amount"/>
+        <property name="userPhone" column="user_phone"/>
+    </class>
+</hibernate-mapping>

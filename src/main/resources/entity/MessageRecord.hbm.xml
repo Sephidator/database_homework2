@@ -5,9 +5,12 @@
 <hibernate-mapping>
 
     <class name="entity.MessageRecord" table="message_record" schema="homework_2">
-        <id name="id" column="id"/>
+        <id name="rid" column="rid"><generator class="increment"/></id>
         <property name="sendTime" column="sendTime"/>
         <property name="number" column="number"/>
+        <property name="freeNum" column="free_num"/>
+        <property name="paidNum" column="paid_num"/>
+        <property name="expense" column="expense"/>
         <property name="senderPhone" column="sender_phone"/>
         <property name="receiverPhone" column="receiver_phone"/>
     </class>

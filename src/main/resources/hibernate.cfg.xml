@@ -18,20 +18,24 @@
 
     <mapping class="entity.BasicPrice"/>
     <mapping resource="entity/BasicPrice.hbm.xml"/>
-    <mapping class="entity.CallRecord"/>
-    <mapping resource="entity/CallRecord.hbm.xml"/>
-    <mapping class="entity.DomesticDataRecord"/>
-    <mapping resource="entity/DomesticDataRecord.hbm.xml"/>
-    <mapping class="entity.LocalDataRecord"/>
-    <mapping resource="entity/LocalDataRecord.hbm.xml"/>
-    <mapping class="entity.MessageRecord"/>
-    <mapping resource="entity/MessageRecord.hbm.xml"/>
     <mapping class="entity.Orders"/>
     <mapping resource="entity/Orders.hbm.xml"/>
     <mapping class="entity.Plan"/>
     <mapping resource="entity/Plan.hbm.xml"/>
     <mapping class="entity.User"/>
     <mapping resource="entity/User.hbm.xml"/>
+    <mapping resource="entity/CallRecord.hbm.xml"/>
+    <mapping class="entity.CallRecord"/>
+    <mapping class="entity.DomesticDataRecord"/>
+    <mapping resource="entity/DomesticDataRecord.hbm.xml"/>
+    <mapping resource="entity/LocalDataRecord.hbm.xml"/>
+    <mapping class="entity.LocalDataRecord"/>
+    <mapping class="entity.MessageRecord"/>
+    <mapping resource="entity/MessageRecord.hbm.xml"/>
+    <mapping class="entity.Plan"/>
+    <mapping resource="entity/MessageRecord.hbm.xml"/>
+    <mapping class="entity.PlanRecord"/>
+    <mapping resource="entity/PlanRecord.hbm.xml"/>
 
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->

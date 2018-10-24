@@ -5,14 +5,12 @@
 <hibernate-mapping>
 
     <class name="entity.Orders" table="orders" schema="homework_2">
-        <id name="orderno" column="orderno">
-            <generator class="increment"/>
-        </id>
+        <id name="orderno" column="orderno"><generator class="increment"/></id>
         <property name="userPhone" column="user_phone"/>
         <property name="pid" column="pid"/>
         <property name="beginTime" column="beginTime"/>
         <property name="endTime" column="endTime"/>
-        <property name="subscribe" column="subscribe"/>
+        <property name="renewal" column="renewal"/>
         <property name="applicable" column="applicable"/>
     </class>
 </hibernate-mapping>

@@ -6,20 +6,20 @@ import java.util.Objects;
 @Entity
 @Table(name = "basic_price", schema = "homework_2", catalog = "")
 public class BasicPrice {
-    private long id;
+    private long pid;
     private Double callPrice;
     private Double messagePrice;
     private Double localDataPrice;
     private Double domesticDataPrice;
 
     @Id
-    @Column(name = "id")
-    public long getId() {
-        return id;
+    @Column(name = "pid")
+    public long getPid() {
+        return pid;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setPid(long pid) {
+        this.pid = pid;
     }
 
     @Basic
@@ -67,7 +67,7 @@ public class BasicPrice {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BasicPrice that = (BasicPrice) o;
-        return id == that.id &&
+        return pid == that.pid &&
                 Objects.equals(callPrice, that.callPrice) &&
                 Objects.equals(messagePrice, that.messagePrice) &&
                 Objects.equals(localDataPrice, that.localDataPrice) &&
@@ -77,6 +77,6 @@ public class BasicPrice {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, callPrice, messagePrice, localDataPrice, domesticDataPrice);
+        return Objects.hash(pid, callPrice, messagePrice, localDataPrice, domesticDataPrice);
     }
 }

@@ -5,7 +5,7 @@
 <hibernate-mapping>
 
     <class name="entity.Plan" table="plan" schema="homework_2">
-        <id name="pid" column="pid"/>
+        <id name="pid" column="pid"><generator class="increment"/></id>
         <property name="pname" column="pname"/>
         <property name="price" column="price"/>
         <property name="freeCall" column="freeCall"/>

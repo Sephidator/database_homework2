@@ -2,6 +2,7 @@ package service;
 
 import entity.Orders;
 import entity.Plan;
+import entity.PlanRecord;
 import entity.User;
 import exception.BalanceException;
 import exception.DatabaseException;
@@ -11,8 +12,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import utils.Arith;
+import utils.TimeTool;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class PlanService extends Service{
         return query.list();
     }
 
-    public void orderPlan(User user, Plan plan, boolean subscribe) throws Exception {
+    public void orderPlan(User user, Plan plan, boolean subscribe) throws DuplicateException, DatabaseException, BalanceException {
         openTransaction();
         List<Orders> applicableOrders = getApplicableOrders(user, plan);
 
@@ -40,8 +41,11 @@ public class PlanService extends Service{
         } else if (user.getBalance() < plan.getPrice()) {
             throw new BalanceException("错误：用户余额不足");
         } else {
+            Date now = TimeTool.now();
             Orders order = new Orders(user.getPhone(), plan.getPid(),
-                    new Date(), null, subscribe, true);
+                    now, null, subscribe, true);
+            PlanRecord planRecord = new PlanRecord(now, plan.getPrice(),
+                    0.0, user.getPhone(), plan.getPid());
 
             user.deductBalance(plan.getPrice());
             user.addFreeCallMinutes(plan.getFreeCall());
@@ -51,11 +55,12 @@ public class PlanService extends Service{
 
             session.save(user);
             session.save(order);
+            session.save(planRecord);
             transaction.commit();
         }
     }
 
-    public void cancelPlan(User user, Plan plan, boolean cancelNow) throws Exception {
+    public void cancelPlan(User user, Plan plan, boolean cancelNow) throws NotExistsException, DatabaseException, DuplicateException {
         openTransaction();
         List<Orders> applicableOrders = getApplicableOrders(user, plan);
 
@@ -65,19 +70,27 @@ public class PlanService extends Service{
             throw new DatabaseException("错误：数据库错误，用户重复订阅套餐");
         } else {
             Orders order = applicableOrders.get(0);
-            if (!order.getSubscribe()) {
-                throw new DuplicateException("错误：用户已经取消订阅该套餐");
+
+            if (!order.getRenewal()) {
+                throw new DuplicateException("错误：用户已经不续约该套餐");
             } else {
-                order.setSubscribe(false);
+                double refund = 0;
+                Date now = TimeTool.now();
+
                 if (cancelNow) {
-                    order.setEndTime(new Date());
+                    order.setEndTime(TimeTool.now());
                     order.setApplicable(false);
-                    handleRefund(user, plan);
+                    refund = handleRefund(user, plan);
                 } else {
-                    order.setEndTime(lastDayThisMonth());
+                    order.setEndTime(TimeTool.lastDayOfMonth());
                 }
+                order.setRenewal(false);
+                PlanRecord planRecord = new PlanRecord(now, 0.0,
+                        refund, user.getPhone(), plan.getPid());
+
                 session.save(user);
                 session.save(order);
+                session.save(planRecord);
                 transaction.commit();
             }
         }
@@ -93,29 +106,24 @@ public class PlanService extends Service{
         return query.list();
     }
 
-    private void handleRefund(User user, Plan plan) {
+    private Double handleRefund(User user, Plan plan) {
         long unusedCall = user.deductFreeCallMinutes(plan.getFreeCall());
         long unusedMessage = user.deductFreeMessageNum(plan.getFreeMessage());
         double unusedLocalData = user.deductFreeLocalData(plan.getFreeLocalData());
         double unusedDomesticData = user.deductFreeDomesticData(plan.getFreeDomesticData());
 
-        double r1 = plan.getFreeCall()!=0 ? Arith.div((double)unusedCall, (double)plan.getFreeCall()) : 1;
-        double r2 = plan.getFreeMessage()!=0 ? Arith.div((double)unusedMessage, (double)plan.getFreeMessage()) : 1;
-        double r3 = plan.getFreeLocalData()!=0 ? Arith.div(unusedLocalData, plan.getFreeLocalData()) : 1;
-        double r4 = plan.getFreeDomesticData()!=0 ? Arith.div(unusedDomesticData, plan.getFreeDomesticData()) : 1;
+        // r1~r4对应通话、短信、本地流量、国内流量中"未使用的优惠占该种优惠的比率"
+        // n计算了r1～r4中非零数的个数，为了计算rate，即"所有未使用的优惠占所有优惠的比率"
+        double r1 = plan.getFreeCall()!=0 ? Arith.div(unusedCall, plan.getFreeCall()) : 0;
+        double r2 = plan.getFreeMessage()!=0 ? Arith.div(unusedMessage, plan.getFreeMessage()) : 0;
+        double r3 = plan.getFreeLocalData()!=0 ? Arith.div(unusedLocalData, plan.getFreeLocalData()) : 0;
+        double r4 = plan.getFreeDomesticData()!=0 ? Arith.div(unusedDomesticData, plan.getFreeDomesticData()) : 0;
+        int n = (r1!=0?1:0) + (r2!=0?1:0) +(r3!=0?1:0) + (r4!=0?1:0);
 
-        double rate = Arith.div(Arith.add(r1, r2, r3, r4), 4);
+        double rate = Arith.div(Arith.add(r1, r2, r3, r4), n);
         double refund = Arith.mul(plan.getPrice(), rate);
         user.addBalance(refund);
-    }
 
-    private Date lastDayThisMonth() {
-        Calendar day = Calendar.getInstance();
-        day.setTime(new Date());
-        day.set(Calendar.DAY_OF_MONTH, day.getActualMaximum(Calendar.DAY_OF_MONTH));
-        day.set(Calendar.HOUR_OF_DAY, 23);
-        day.set(Calendar.MINUTE, 59);
-        day.set(Calendar.SECOND, 59);
-        return day.getTime();
+        return refund;
     }
 }

@@ -31,12 +31,23 @@ public class Arith {
      * @param v2 加数
      * @param v3 加数
      * @param v4 加数
-     * @return 两个参数的和
+     * @return 四个参数的和
      */
     public static double add(double v1, double v2, double v3, double v4){
-        double sum1 = add(v1, v2);
-        double sum2 = add(v3, v4);
-        return add(sum1, sum2);
+        return add(add(v1, v2), add(v3, v4));
+    }
+
+    /**
+     * 提供精确的加法运算。
+     * @param v1 被加数
+     * @param v2 加数
+     * @param v3 加数
+     * @param v4 加数
+     * @param v5 加数
+     * @return 两个参数的和
+     */
+    public static double add(double v1, double v2, double v3, double v4, double v5){
+        return add(add(v1, v2, v3, v4), v5);
     }
     
     /**

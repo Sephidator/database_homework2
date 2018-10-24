@@ -4,13 +4,12 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="entity.DomesticDataRecord" table="domestic_data_record" schema="homework_2">
+    <class name="entity.PlanRecord" table="plan_record" schema="homework_2">
         <id name="rid" column="rid"><generator class="increment"/></id>
-        <property name="sendTime" column="sendTime"/>
-        <property name="amount" column="amount"/>
-        <property name="freeAmount" column="free_amount"/>
-        <property name="paidAmount" column="paid_amount"/>
+        <property name="time" column="time"/>
         <property name="expense" column="expense"/>
+        <property name="refund" column="refund"/>
         <property name="userPhone" column="user_phone"/>
+        <property name="pid" column="pid"/>
     </class>
 </hibernate-mapping>

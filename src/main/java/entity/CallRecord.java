@@ -1,16 +1,18 @@
 package entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "call_record", schema = "homework_2", catalog = "")
 public class CallRecord {
-    private long id;
+    private long rid;
     private Date beginTime;
     private Long minutes;
+    private Long freeMinutes;
+    private Long paidMinutes;
+    private Double expense;
     private String callerPhone;
     private String calleePhone;
 
@@ -25,13 +27,13 @@ public class CallRecord {
     }
 
     @Id
-    @Column(name = "id")
-    public long getId() {
-        return id;
+    @Column(name = "rid")
+    public long getRid() {
+        return rid;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setRid(long rid) {
+        this.rid = rid;
     }
 
     @Basic
@@ -52,6 +54,36 @@ public class CallRecord {
 
     public void setMinutes(Long minutes) {
         this.minutes = minutes;
+    }
+
+    @Basic
+    @Column(name = "free_minutes")
+    public Long getFreeMinutes() {
+        return freeMinutes;
+    }
+
+    public void setFreeMinutes(Long freeMinutes) {
+        this.freeMinutes = freeMinutes;
+    }
+
+    @Basic
+    @Column(name = "paid_minutes")
+    public Long getPaidMinutes() {
+        return paidMinutes;
+    }
+
+    public void setPaidMinutes(Long paidMinutes) {
+        this.paidMinutes = paidMinutes;
+    }
+
+    @Basic
+    @Column(name = "expense")
+    public Double getExpense() {
+        return expense;
+    }
+
+    public void setExpense(Double expense) {
+        this.expense = expense;
     }
 
     @Basic
@@ -78,17 +110,19 @@ public class CallRecord {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CallRecord that = (CallRecord) o;
-        return id == that.id &&
-                Objects.equals(beginTime, that.beginTime) &&
-                Objects.equals(minutes, that.minutes) &&
-                Objects.equals(callerPhone, that.callerPhone) &&
-                Objects.equals(calleePhone, that.calleePhone);
+        CallRecord record = (CallRecord) o;
+        return rid == record.rid &&
+                Objects.equals(beginTime, record.beginTime) &&
+                Objects.equals(minutes, record.minutes) &&
+                Objects.equals(freeMinutes, record.freeMinutes) &&
+                Objects.equals(paidMinutes, record.paidMinutes) &&
+                Objects.equals(callerPhone, record.callerPhone) &&
+                Objects.equals(calleePhone, record.calleePhone);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, beginTime, minutes, callerPhone, calleePhone);
+        return Objects.hash(rid, beginTime, minutes, freeMinutes, paidMinutes, callerPhone, calleePhone);
     }
 }

@@ -87,8 +87,9 @@ public class User {
      * @return 实际扣除的免费通话时长
      */
     public Long deductFreeCallMinutes(Long minutes) {
-        this.freeCallMinutes = this.freeCallMinutes > minutes ? this.freeCallMinutes - minutes : 0;
-        return this.freeCallMinutes > minutes ? minutes : this.freeCallMinutes;
+        long result = this.freeCallMinutes > minutes ? minutes : this.freeCallMinutes;
+        this.freeCallMinutes = this.freeCallMinutes - result;
+        return result;
     }
 
     @Basic
@@ -111,8 +112,9 @@ public class User {
      * @return 实际扣除的免费短信数量
      */
     public Long deductFreeMessageNum(Long messageNum) {
-        this.freeMessageNum = this.freeMessageNum > messageNum ? this.freeMessageNum - messageNum : 0;
-        return this.freeMessageNum > messageNum ? messageNum : this.freeMessageNum;
+        long result = this.freeMessageNum > messageNum ? messageNum : this.freeMessageNum;
+        this.freeMessageNum = this.freeMessageNum - result;
+        return result;
     }
 
     @Basic
@@ -135,8 +137,9 @@ public class User {
      * @return 实际扣除的免费本地流量
      */
     public Double deductFreeLocalData(Double localData) {
-        this.freeLocalData = this.freeLocalData > localData ? Arith.sub(this.freeLocalData, localData) : 0;
-        return this.freeLocalData > localData ? localData : this.freeLocalData;
+        double result = this.freeLocalData > localData ? localData : this.freeLocalData;
+        this.freeLocalData = this.freeLocalData - result;
+        return result;
     }
 
     @Basic
@@ -159,8 +162,9 @@ public class User {
      * @return 实际扣除的免费国内流量
      */
     public Double deductFreeDomesticData(Double domesticData) {
-        this.freeDomesticData = this.freeDomesticData > domesticData ? Arith.sub(this.freeDomesticData, domesticData) : 0;
-        return this.freeDomesticData > domesticData ? domesticData : this.freeDomesticData;
+        double result = this.freeDomesticData > domesticData ? domesticData : this.freeDomesticData;
+        this.freeDomesticData = this.freeDomesticData - result;
+        return result;
     }
 
     @Override

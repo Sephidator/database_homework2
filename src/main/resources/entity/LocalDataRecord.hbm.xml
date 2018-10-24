@@ -5,9 +5,12 @@
 <hibernate-mapping>
 
     <class name="entity.LocalDataRecord" table="local_data_record" schema="homework_2">
-        <id name="id" column="id"/>
+        <id name="rid" column="rid"><generator class="increment"/></id>
         <property name="sendTime" column="sendTime"/>
         <property name="amount" column="amount"/>
+        <property name="freeAmount" column="free_amount"/>
+        <property name="paidAmount" column="paid_amount"/>
+        <property name="expense" column="expense"/>
         <property name="userPhone" column="user_phone"/>
     </class>
 </hibernate-mapping>

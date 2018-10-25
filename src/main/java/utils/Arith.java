@@ -1,5 +1,6 @@
 package utils;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 
 /**
  * 由于Java的简单类型不能够精确的对浮点数进行运算，这个工具类提供精
@@ -117,5 +118,16 @@ public class Arith {
         BigDecimal b = new BigDecimal(Double.toString(v));
         BigDecimal one = new BigDecimal("1");
         return b.divide(one, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+    /**
+     * 将小数规范化，即将 1.0 改成 1
+     * @param number 带规范化的数字
+     * @return 规范化后的数字(String类型)
+     */
+    public static String format(double number) {
+        NumberFormat nf = NumberFormat.getInstance();
+        String result = nf.format(number);
+        return result.replace(",", "");
     }
 };

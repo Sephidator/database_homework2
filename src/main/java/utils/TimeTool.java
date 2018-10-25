@@ -12,6 +12,16 @@ public class TimeTool {
         return new Date();
     }
 
+    public static int getYear() {
+        Calendar today = Calendar.getInstance();
+        return today.get(Calendar.YEAR);
+    }
+
+    public static int getMonth() {
+        Calendar today = Calendar.getInstance();
+        return today.get(Calendar.MONTH) + 1;
+    }
+
     public static Date lastDayOfMonth() {
         Calendar day = Calendar.getInstance();
         day.setTime(new Date());

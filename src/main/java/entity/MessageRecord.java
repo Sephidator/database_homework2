@@ -1,6 +1,10 @@
 package entity;
 
+import utils.Arith;
+
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -124,5 +128,16 @@ public class MessageRecord {
     public int hashCode() {
 
         return Objects.hash(rid, sendTime, number, freeNum, paidNum, senderPhone, receiverPhone);
+    }
+
+    public void showInfo() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println("短信发送时间: " + dateFormat.format(sendTime));
+        System.out.println("发送者手机: " + senderPhone);
+        System.out.println("接收者手机: " + receiverPhone);
+        System.out.println("短信总数量: " + number + "条");
+        System.out.println("免费短信数量: " + freeNum + "条");
+        System.out.println("付费短信数量: " + paidNum + "条");
+        System.out.println("话费支出: " + Arith.format(expense) + "元");
     }
 }

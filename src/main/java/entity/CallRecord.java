@@ -1,6 +1,10 @@
 package entity;
 
+import utils.Arith;
+
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -124,5 +128,16 @@ public class CallRecord {
     public int hashCode() {
 
         return Objects.hash(rid, beginTime, minutes, freeMinutes, paidMinutes, callerPhone, calleePhone);
+    }
+
+    public void showInfo() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println("通话开始时间: " + dateFormat.format(beginTime));
+        System.out.println("呼叫者手机: " + callerPhone);
+        System.out.println("接听者手机: " + calleePhone);
+        System.out.println("通话总时长: " + minutes + "分钟");
+        System.out.println("免费通话时长: " + freeMinutes + "分钟");
+        System.out.println("付费通话时长: " + paidMinutes + "条");
+        System.out.println("话费支出: " + Arith.format(expense) + "元");
     }
 }

@@ -1,6 +1,10 @@
 package entity;
 
+import utils.Arith;
+
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -111,5 +115,15 @@ public class LocalDataRecord {
     public int hashCode() {
 
         return Objects.hash(rid, sendTime, amount, freeAmount, paidAmount, userPhone);
+    }
+
+    public void showInfo() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println("本地流量使用时间: " + dateFormat.format(sendTime));
+        System.out.println("使用者手机: " + userPhone);
+        System.out.println("本地流量总量: " + Arith.format(amount) + "M");
+        System.out.println("免费本地流量: " + Arith.format(freeAmount) + "M");
+        System.out.println("付费本地流量: " + Arith.format(paidAmount) + "M");
+        System.out.println("话费支出: " + Arith.format(expense) + "元");
     }
 }

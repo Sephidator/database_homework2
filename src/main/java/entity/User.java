@@ -187,4 +187,15 @@ public class User {
 
         return Objects.hash(phone, uname, balance, province, freeMessageNum, freeCallMinutes, freeLocalData, freeDomesticData);
     }
+
+    public void showInfo() {
+        System.out.println("用户名: " + uname);
+        System.out.println("手机号: " + phone);
+        System.out.println("省份: " + province);
+        System.out.println("余额: " + Arith.format(balance) + "元");
+        System.out.println("免费通话时长: " + freeCallMinutes + "分钟");
+        System.out.println("免费短信数量: " + freeMessageNum + "条");
+        System.out.println("免费本地流量: " + Arith.format(freeLocalData) + "M");
+        System.out.println("免费国内流量: " + Arith.format(freeDomesticData) + "M");
+    }
 }

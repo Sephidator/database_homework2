@@ -5,7 +5,7 @@
 <hibernate-mapping>
 
     <class name="entity.BasicPrice" table="basic_price" schema="homework_2">
-        <id name="pid" column="pid"/>
+        <id name="pid" column="pid"><generator class="increment"/></id>
         <property name="callPrice" column="callPrice"/>
         <property name="messagePrice" column="messagePrice"/>
         <property name="localDataPrice" column="localDataPrice"/>

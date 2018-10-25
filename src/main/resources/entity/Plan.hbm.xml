@@ -12,5 +12,11 @@
         <property name="freeMessage" column="freeMessage"/>
         <property name="freeLocalData" column="freeLocalData"/>
         <property name="freeDomesticData" column="freeDomesticData"/>
+        <!--配置单向一对多关系-->
+        <set name="orderList" table="order">
+            <!--指定关联的外键列-->
+            <key column="pid"/>
+            <one-to-many class="entity.Orders"/>
+        </set>
     </class>
 </hibernate-mapping>

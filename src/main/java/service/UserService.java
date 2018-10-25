@@ -23,7 +23,6 @@ public class UserService extends Service{
     }
 
     public void checkBill(int year, int month, User user) {
-        System.out.println("--------------------");
         System.out.println("用户账单（" + year + "年" + month + "月）：");
         System.out.println("用户名：" + user.getUname() + "，手机号：" + user.getPhone());
         System.out.println();
@@ -36,8 +35,7 @@ public class UserService extends Service{
 
         double totalExpense = Arith.add(callExpense, messageExpense,
                 localDataExpense, domesticDataExpense, planExpense);
-        System.out.println("当月话费总额：" + totalExpense + "元");
-        System.out.println("--------------------");
+        System.out.println("当月话费总额：" + Arith.format(totalExpense) + "元");
     }
 
     /**
@@ -69,7 +67,8 @@ public class UserService extends Service{
         System.out.println("通话情况：");
         System.out.println("    免费通话时长：" + freeCallMinutes + "分钟");
         System.out.println("    付费通话时长：" + paidCallMinutes + "分钟");
-        System.out.println("    用户通话费用：" + callExpense + "元" + System.lineSeparator());
+        System.out.println("    用户通话费用：" + Arith.format(callExpense) + "元");
+        System.out.println();
         return callExpense;
     }
 
@@ -102,7 +101,8 @@ public class UserService extends Service{
         System.out.println("短信使用情况：");
         System.out.println("    免费短信数量：" + freeMessageNum + "条");
         System.out.println("    付费短信数量：" + paidMessageNum + "条");
-        System.out.println("    用户短信费用：" + messageExpense + "元" + System.lineSeparator());
+        System.out.println("    用户短信费用：" + Arith.format(messageExpense) + "元");
+        System.out.println();
         return messageExpense;
     }
 
@@ -133,9 +133,10 @@ public class UserService extends Service{
         }
 
         System.out.println("本地流量使用情况：");
-        System.out.println("    免费本地流量：" + freeAmount + "M");
-        System.out.println("    付费本地流量：" + paidAmount + "M");
-        System.out.println("    本地流量费用：" + localDataExpense + "元" + System.lineSeparator());
+        System.out.println("    免费本地流量：" + Arith.format(freeAmount) + "M");
+        System.out.println("    付费本地流量：" + Arith.format(paidAmount) + "M");
+        System.out.println("    本地流量费用：" + Arith.format(localDataExpense) + "元");
+        System.out.println();
         return localDataExpense;
     }
 
@@ -166,9 +167,10 @@ public class UserService extends Service{
         }
 
         System.out.println("国内流量使用情况：");
-        System.out.println("    免费国内流量：" + freeAmount + "M");
-        System.out.println("    付费国内流量：" + paidAmount + "M");
-        System.out.println("    国内流量费用：" + domesticDataExpense + "元" + System.lineSeparator());
+        System.out.println("    免费国内流量：" + Arith.format(freeAmount) + "M");
+        System.out.println("    付费国内流量：" + Arith.format(paidAmount) + "M");
+        System.out.println("    国内流量费用：" + Arith.format(domesticDataExpense) + "元");
+        System.out.println();
         return domesticDataExpense;
     }
 
@@ -199,9 +201,10 @@ public class UserService extends Service{
         }
 
         System.out.println("套餐费用：");
-        System.out.println("    套餐订阅费用：" + orderExpense + "元");
-        System.out.println("    退订套餐退款：" + refund + "元");
-        System.out.println("    实际套餐费用：" + planExpense + "元" + System.lineSeparator());
+        System.out.println("    套餐订阅费用：" + Arith.format(orderExpense) + "元");
+        System.out.println("    退订套餐退款：" + Arith.format(refund) + "元");
+        System.out.println("    实际套餐费用：" + Arith.format(planExpense) + "元");
+        System.out.println();
         return planExpense;
     }
 }

@@ -30,7 +30,8 @@ public class RecordService extends Service{
         transaction.commit();
 
         if (user.getBalance() < 0) {
-            throw new BalanceException("警告：用户余额不足，余额为" + user.getBalance() + "元");
+            throw new BalanceException("警告：用户余额不足，余额为"
+                    + Arith.format(user.getBalance()) + "元");
         }
     }
 
@@ -53,7 +54,8 @@ public class RecordService extends Service{
         transaction.commit();
 
         if (user.getBalance() < 0) {
-            throw new BalanceException("警告：用户余额不足，余额为" + user.getBalance() + "元");
+            throw new BalanceException("警告：用户余额不足，余额为"
+                    + Arith.format(user.getBalance()) + "元");
         }
     }
 
@@ -76,7 +78,8 @@ public class RecordService extends Service{
         transaction.commit();
 
         if (user.getBalance() < 0) {
-            throw new BalanceException("警告：用户余额不足，余额为" + user.getBalance() + "元");
+            throw new BalanceException("警告：用户余额不足，余额为"
+                    + Arith.format(user.getBalance()) + "元");
         }
     }
 
@@ -99,7 +102,8 @@ public class RecordService extends Service{
         transaction.commit();
 
         if (user.getBalance() < 0) {
-            throw new BalanceException("警告：用户余额不足，余额为" + user.getBalance() + "元");
+            throw new BalanceException("警告：用户余额不足，余额为"
+                    + Arith.format(user.getBalance()) + "元");
         }
     }
 }

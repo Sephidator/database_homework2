@@ -1,10 +1,17 @@
 package entity;
 
+import utils.Arith;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Plan {
@@ -15,6 +22,7 @@ public class Plan {
     private Long freeMessage;
     private Double freeLocalData;
     private Double freeDomesticData;
+    private Set<Orders> orderList = new HashSet<>();
 
     @Id
     @Column(name = "pid")
@@ -86,6 +94,14 @@ public class Plan {
         this.freeDomesticData = freeDomesticData;
     }
 
+    public Set<Orders> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(Set<Orders> orderList) {
+        this.orderList = orderList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,5 +120,42 @@ public class Plan {
     public int hashCode() {
 
         return Objects.hash(pid, pname, price, freeCall, freeMessage, freeLocalData, freeDomesticData);
+    }
+
+    public void showInfo() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        System.out.println("套餐名: " + pname);
+        System.out.println("套餐价格: " + Arith.format(price) + "元");
+
+        StringBuilder info = new StringBuilder();
+        String toPrint = "";
+
+        toPrint = freeCall!=0 ? "免费通话时长" + freeCall + "分钟" : "";
+        info.append(toPrint);
+
+        toPrint = freeMessage!=0 ? "免费短信数量" + freeMessage + "条" : "";
+        info.append((!info.toString().equals("")&&!toPrint.equals("")) ? ", " : "");
+        info.append(toPrint);
+
+        toPrint = freeLocalData!=0 ? "免费本地流量" + Arith.format(freeLocalData) + "M" : "";
+        info.append((!info.toString().equals("")&&!toPrint.equals("")) ? ", " : "");
+        info.append(toPrint);
+
+        toPrint = freeDomesticData!=0 ? "免费国内流量" + Arith.format(freeDomesticData) + "M" : "";
+        info.append((!info.toString().equals("")&&!toPrint.equals("")) ? ", " : "");
+        info.append(toPrint);
+
+        System.out.println("套餐优惠: " + info.toString());
+
+        System.out.println("订阅记录: ");
+        for(Orders order: orderList) {
+            System.out.print("    订阅日期: " + dateFormat.format(order.getBeginTime()) + ", ");
+            if (order.getEndTime() != null) {
+                System.out.print("退订日期: " + dateFormat.format(order.getEndTime()) + ", ");
+            }
+            System.out.print("订阅状态: " + (order.getApplicable() ? "订阅中, " : "已退订, "));
+            System.out.println("续约状态: " + (order.getRenewal() ? "续约中" : "不续约"));
+        }
     }
 }

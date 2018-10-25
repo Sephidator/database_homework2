@@ -14,8 +14,11 @@ import org.hibernate.query.Query;
 import utils.Arith;
 import utils.TimeTool;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class PlanService extends Service{
 
@@ -27,23 +30,32 @@ public class PlanService extends Service{
         openTransaction();
         String hql = "SELECT p FROM Orders o, Plan p WHERE o.userPhone = :user_phone AND o.pid = p.pid";
         Query query = session.createQuery(hql).setParameter("user_phone", user.getPhone());
-        return query.list();
+        List<Plan> plans = query.list();
+        for(Plan plan: plans) {
+            Set<Orders> orderList = plan.getOrderList();
+            for(Orders order: orderList) {
+                if (!order.getUserPhone().equals(user.getPhone())) {
+                    orderList.remove(order);
+                }
+            }
+        }
+        return plans;
     }
 
-    public void orderPlan(User user, Plan plan, boolean subscribe) throws DuplicateException, DatabaseException, BalanceException {
+    public void orderPlan(User user, Plan plan, boolean renewal) throws DuplicateException, DatabaseException, BalanceException {
         openTransaction();
         List<Orders> applicableOrders = getApplicableOrders(user, plan);
 
         if (applicableOrders.size() == 1) {
-            throw new DuplicateException("错误：用户已经订阅该套餐");
+            throw new DuplicateException("错误: 用户已经订阅该套餐");
         } else if (applicableOrders.size() > 1) {
-            throw new DatabaseException("错误：数据库错误，用户重复订阅套餐");
+            throw new DatabaseException("错误: 数据库错误，用户重复订阅套餐");
         } else if (user.getBalance() < plan.getPrice()) {
-            throw new BalanceException("错误：用户余额不足");
+            throw new BalanceException("错误: 用户余额不足");
         } else {
             Date now = TimeTool.now();
             Orders order = new Orders(user.getPhone(), plan.getPid(),
-                    now, null, subscribe, true);
+                    now, null, renewal, true);
             PlanRecord planRecord = new PlanRecord(now, plan.getPrice(),
                     0.0, user.getPhone(), plan.getPid());
 
@@ -65,14 +77,14 @@ public class PlanService extends Service{
         List<Orders> applicableOrders = getApplicableOrders(user, plan);
 
         if (applicableOrders.size() == 0) {
-            throw new NotExistsException("错误：用户未订阅该套餐");
+            throw new NotExistsException("错误: 用户未订阅该套餐");
         } else if (applicableOrders.size() > 1) {
-            throw new DatabaseException("错误：数据库错误，用户重复订阅套餐");
+            throw new DatabaseException("错误: 数据库错误，用户重复订阅套餐");
         } else {
             Orders order = applicableOrders.get(0);
 
             if (!order.getRenewal()) {
-                throw new DuplicateException("错误：用户已经不续约该套餐");
+                throw new DuplicateException("错误: 用户已经不续约该套餐");
             } else {
                 double refund = 0;
                 Date now = TimeTool.now();

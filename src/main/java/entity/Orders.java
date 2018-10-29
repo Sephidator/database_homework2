@@ -60,7 +60,7 @@ public class Orders {
     }
 
     @Basic
-    @Column(name = "beginTime")
+    @Column(name = "begin_time")
     public Date getBeginTime() {
         return beginTime;
     }
@@ -70,7 +70,7 @@ public class Orders {
     }
 
     @Basic
-    @Column(name = "endTime")
+    @Column(name = "end_time")
     public Date getEndTime() {
         return endTime;
     }

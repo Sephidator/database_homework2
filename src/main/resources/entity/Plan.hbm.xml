@@ -8,12 +8,12 @@
         <id name="pid" column="pid"><generator class="increment"/></id>
         <property name="pname" column="pname"/>
         <property name="price" column="price"/>
-        <property name="freeCall" column="freeCall"/>
-        <property name="freeMessage" column="freeMessage"/>
-        <property name="freeLocalData" column="freeLocalData"/>
-        <property name="freeDomesticData" column="freeDomesticData"/>
+        <property name="freeCallMinutes" column="free_call_minutes"/>
+        <property name="freeMessageNum" column="free_message_num"/>
+        <property name="freeLocalData" column="free_local_data"/>
+        <property name="freeDomesticData" column="free_domestic_data"/>
         <!--配置单向一对多关系-->
-        <set name="orderList" table="order">
+        <set name="orderList" table="orders">
             <!--指定关联的外键列-->
             <key column="pid"/>
             <one-to-many class="entity.Orders"/>

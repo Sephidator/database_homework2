@@ -23,7 +23,7 @@ public class BasicPrice {
     }
 
     @Basic
-    @Column(name = "callPrice")
+    @Column(name = "call_price")
     public Double getCallPrice() {
         return callPrice;
     }
@@ -33,7 +33,7 @@ public class BasicPrice {
     }
 
     @Basic
-    @Column(name = "messagePrice")
+    @Column(name = "message_price")
     public Double getMessagePrice() {
         return messagePrice;
     }
@@ -43,7 +43,7 @@ public class BasicPrice {
     }
 
     @Basic
-    @Column(name = "localDataPrice")
+    @Column(name = "local_data_price")
     public Double getLocalDataPrice() {
         return localDataPrice;
     }
@@ -53,7 +53,7 @@ public class BasicPrice {
     }
 
     @Basic
-    @Column(name = "domesticDataPrice")
+    @Column(name = "domestic_data_price")
     public Double getDomesticDataPrice() {
         return domesticDataPrice;
     }

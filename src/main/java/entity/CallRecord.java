@@ -41,7 +41,7 @@ public class CallRecord {
     }
 
     @Basic
-    @Column(name = "beginTime")
+    @Column(name = "begin_time")
     public Date getBeginTime() {
         return beginTime;
     }
@@ -137,7 +137,7 @@ public class CallRecord {
         System.out.println("接听者手机: " + calleePhone);
         System.out.println("通话总时长: " + minutes + "分钟");
         System.out.println("免费通话时长: " + freeMinutes + "分钟");
-        System.out.println("付费通话时长: " + paidMinutes + "条");
+        System.out.println("付费通话时长: " + paidMinutes + "分钟");
         System.out.println("话费支出: " + Arith.format(expense) + "元");
     }
 }

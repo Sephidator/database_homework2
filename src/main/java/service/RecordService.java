@@ -65,6 +65,14 @@ public class RecordService extends Service{
         double amount = record.getAmount();
         double freeAmount = user.deductFreeLocalData(amount);
         double paidAmount = amount - freeAmount;
+        if (paidAmount > 0 && user.getFreeDomesticData() > 0) {
+            double freeDomesticAmount = Math.min(paidAmount, user.getFreeDomesticData());
+            DomesticDataRecord domesticDataRecord = new DomesticDataRecord(
+                    record.getSendTime(), freeDomesticAmount, user.getPhone());
+            addDomesticDataRecord(domesticDataRecord, user);
+            openTransaction();
+            paidAmount = Arith.sub(paidAmount, freeDomesticAmount);
+        }
         double localDataPrice = priceInfo().getLocalDataPrice();
         double localDataExpense = Arith.mul(paidAmount, localDataPrice);
 

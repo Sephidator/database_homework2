@@ -68,7 +68,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "freeCallMinutes")
+    @Column(name = "free_call_minutes")
     public Long getFreeCallMinutes() {
         return freeCallMinutes;
     }
@@ -93,7 +93,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "freeMessageNum")
+    @Column(name = "free_message_num")
     public Long getFreeMessageNum() {
         return freeMessageNum;
     }
@@ -118,7 +118,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "freeLocalData")
+    @Column(name = "free_local_data")
     public Double getFreeLocalData() {
         return freeLocalData;
     }
@@ -143,7 +143,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "freeDomesticData")
+    @Column(name = "free_domestic_data")
     public Double getFreeDomesticData() {
         return freeDomesticData;
     }

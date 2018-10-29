@@ -6,7 +6,7 @@
 
     <class name="entity.CallRecord" table="call_record" schema="homework_2">
         <id name="rid" column="rid"><generator class="increment"/></id>
-        <property name="beginTime" column="beginTime"/>
+        <property name="beginTime" column="begin_time"/>
         <property name="minutes" column="minutes"/>
         <property name="freeMinutes" column="free_minutes"/>
         <property name="paidMinutes" column="paid_minutes"/>

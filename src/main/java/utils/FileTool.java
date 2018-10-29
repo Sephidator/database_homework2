@@ -21,7 +21,6 @@ public class FileTool {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(
                     new FileInputStream(filePath), "utf-8"));
-
             StringBuilder sql = new StringBuilder();
             String line;
             while (true){
@@ -43,7 +42,6 @@ public class FileTool {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return sqlList;
     }
 }

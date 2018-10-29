@@ -39,18 +39,20 @@ public class Main {
         /*
         * 用户(13218019068，陈骁，话费余额400元)订购套餐
         * 订购的是以下4个套餐
-        * "话费包月套餐(ID=1)": 价格为20元，优惠为100分钟免费通话时长
+        * "话费包月套餐(ID=1)": 价格为20元，优惠为100分钟免费通话时长和50条免费短信
         * "短信包月套餐(ID=2)": 价格为10元，优惠为200条免费短信
         * "本地流量包月套餐(ID=3)": 价格为20元，优惠为100分钟免费通话时长
         * "国内流量包月套餐(ID=4)": 价格为30元，优惠为200条免费短信
         *
         * 对于每一次套餐订阅
         * 在orders表中：
-        *   如果用户没有订阅套餐，则插入一条新的记录，保存操作时间和支付金额；
-        *   如果用户正在适用该套餐，则会提示不能订阅
-        *   (用户对于退订过的套餐可以再次订阅，这会在orders表中留下两条记录；
-        *   对于月底生效的退订，用户在本月再次订阅该套餐时，会提示不能订阅)
-        * 在plan_record表中：插入一条记录，记录订阅时间和数额
+        *   · 如果用户没有订阅套餐，则插入一条新的记录，保存用户对于套餐的订阅情况，
+        *     包括开始时间、结束时间、订阅状态和续约状态等。
+        *   · 如果用户正在适用该套餐，则会提示不能订阅。
+        *     (用户对于退订过的套餐可以再次订阅，这会在orders表中留下两条记录；
+        *     对于月底生效的退订，用户在本月再次订阅该套餐时，会提示不能订阅)
+        * 在plan_record表中：插入一条记录，记录操作时间和支付的话费
+        * 在user表中：更新用户的话费余额和用户的免费额度
         * */
         try {
             System.out.println("#1.订购套餐: ");
@@ -102,7 +104,7 @@ public class Main {
                 planList.get(i).showInfo();
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         } finally {
             printTime();
         }
@@ -111,6 +113,8 @@ public class Main {
          * 用户(13218019068，陈骁)向用户(13780946508，刘嘉)打电话
          * 通话时长为20分钟，只会消耗用户陈骁的免费通话时长，
          * 打印通话信息，包括通话时间、免费通话时长、付费通话时长、扣除的话费等
+         *
+         * 如果用户余额为0或负数，则无论用户是否有免费的通话时长，均不能呼叫（欠费停机）。
          * */
         try {
             System.out.println("#3.拨打电话: ");
@@ -125,7 +129,7 @@ public class Main {
                 recordService.addCallRecord(record, caller);
                 record.showInfo();
             } else {
-                throw new BalanceException("错误: 无法呼叫用户余额为负数");
+                throw new BalanceException("错误: 无法呼叫，用户余额不足");
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -134,9 +138,12 @@ public class Main {
         }
 
         /*
-         * 用户(13218019068，陈骁)使用 2075M 本地流量
-         * 超出了套餐内的优惠 2000M，额外的 75M 消耗用户余额
+         * 用户(13218019068，陈骁)使用2075M本地流量
+         * 超出了套餐内的优惠2000M，额外的75M转换成国内流量
+         * 即用户最终使用了2000M本地流量和75M国内流量
          * 打印流量使用信息，包括使用时间、免费流量、付费流量、扣除的话费等
+         *
+         * 如果用户余额为0或负数，则无论用户是否有免费的流量额度，均不能使用流量。
          * */
         try {
             System.out.println("#4.使用本地流量: ");
@@ -144,9 +151,14 @@ public class Main {
 
             startTime = System.currentTimeMillis();
             User user = session.load(User.class, "13218019068");
-            LocalDataRecord record = new LocalDataRecord(TimeTool.now(), 2075.0, user.getPhone());
-            recordService.addLocalDataRecord(record, user);
-            record.showInfo();
+            if (user.getBalance() > 0) {
+                LocalDataRecord record = new LocalDataRecord(TimeTool.now(), 2075.0, user.getPhone());
+                recordService.addLocalDataRecord(record, user);
+                userService.checkLocalData(TimeTool.getYear(), TimeTool.getMonth(), user);
+                userService.checkDomesticData(TimeTool.getYear(), TimeTool.getMonth(), user);
+            } else {
+                throw new BalanceException("错误: 无法使用流量，用户余额不足");
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
@@ -155,17 +167,17 @@ public class Main {
 
         /*
          * 用户(13218019068，陈骁，话费余额400元)退订套餐1，立即生效
-         * 套餐信息: "话费包月套餐(ID=1)"，价格为20元，优惠为100分钟免费通话时长
+         * 套餐信息: "话费包月套餐(ID=1)"，价格为20元，优惠为100分钟免费通话时长和50条免费短信
          *
          * 对于立即生效的套餐退订，计算用户已经使用的优惠，对于剩余的优惠进行退款
-         * 用户已经拨打了20分钟电话，所以退款的金额为 (100-20)/100 * 20 = 16元
-         * 用户原来有170元的话费和剩余80分钟的免费通话时长
-         * 退订后应该有186元的话费和0分钟的免费通话时长
+         * 用户已经拨打了20分钟电话，所以退款的金额为 ((100-20)/100 + 50/50) * 20 = 18元
+         * 用户原来有320元的话费和剩余80分钟的免费通话时长，250条免费短信
+         * 退订后应该有338元的话费和0分钟的免费通话时长，200条免费短信
          *
          * 在orders表中：设置订阅结束日期为现在，设置订阅状态为"不订阅"，续约状态为"不续约"
          * 在plan_record表中：插入一条记录，记录退订时间和数额
          *
-         * 退订完成后打印用户信息，显示用户的话费和免费通话时长确实如上文所说
+         * 退订完成后打印用户信息，显示更新后的用户的话费和免费通话时长
          * 并且查询套餐，会看到"话费包月套餐"的订阅记录更新
          * */
         try {
@@ -203,13 +215,13 @@ public class Main {
          *
          * 在每个月第一天的0点，系统扫描所有订阅记录，
          * 对于续约状态为"不续约"的套餐订阅，将订阅状态改成"不订阅"
-         * 对于续约状态为"续约中"的套餐订阅，插入一条
+         * 对于续约状态为"续约中"的套餐订阅，插入一条记录，记录退订时间和数额
          *
          * 退订完成后打印用户信息，显示用户的话费和免费短信数量没有变化
          * 并且查询套餐，会看到"短信包月套餐"的订阅记录更新，结束日期为本月底，续约状态为"不续约"
          * */
         try {
-            System.out.println("#6.退订\"话费包月套餐\" 月底生效: ");
+            System.out.println("#6.退订\"短信包月套餐\" 月底生效: ");
             System.out.println("--------------------");
 
             startTime = System.currentTimeMillis();
@@ -237,7 +249,7 @@ public class Main {
          * 打印用户(13218019068，陈骁，话费余额400元)的账单
          * 可以设置参数查找不同月份，代码中打印的是本月的账单
          *
-         * 通过编写配置文件，使得每次开启会话时hibernate都会重新创建表
+         * 通过编写配置文件，使得每次开启会话时hibernate都会重新创建空表
          * 随后执行sql语句，插入演示用的数据
          * 所以打印的账单结果应该仅限于上面的这些操作
          * */
@@ -280,7 +292,7 @@ public class Main {
         System.out.println();
     }
 
-    public static void destroy() {
+    private static void destroy() {
         session.close(); //关闭会话
         sessionFactory.close(); //关闭会话工厂
     }

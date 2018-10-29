@@ -8,8 +8,8 @@
         <id name="orderno" column="orderno"><generator class="increment"/></id>
         <property name="userPhone" column="user_phone"/>
         <property name="pid" column="pid"/>
-        <property name="beginTime" column="beginTime"/>
-        <property name="endTime" column="endTime"/>
+        <property name="beginTime" column="begin_time"/>
+        <property name="endTime" column="end_time"/>
         <property name="renewal" column="renewal"/>
         <property name="applicable" column="applicable"/>
     </class>

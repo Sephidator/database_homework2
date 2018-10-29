@@ -18,8 +18,8 @@ public class Plan {
     private long pid;
     private String pname;
     private Double price;
-    private Long freeCall;
-    private Long freeMessage;
+    private Long freeCallMinutes;
+    private Long freeMessageNum;
     private Double freeLocalData;
     private Double freeDomesticData;
     private Set<Orders> orderList = new HashSet<>();
@@ -55,27 +55,27 @@ public class Plan {
     }
 
     @Basic
-    @Column(name = "freeCall")
-    public Long getFreeCall() {
-        return freeCall;
+    @Column(name = "free_call_minutes")
+    public Long getFreeCallMinutes() {
+        return freeCallMinutes;
     }
 
-    public void setFreeCall(Long freeCall) {
-        this.freeCall = freeCall;
-    }
-
-    @Basic
-    @Column(name = "freeMessage")
-    public Long getFreeMessage() {
-        return freeMessage;
-    }
-
-    public void setFreeMessage(Long freeMessage) {
-        this.freeMessage = freeMessage;
+    public void setFreeCallMinutes(Long freeCallMinutes) {
+        this.freeCallMinutes = freeCallMinutes;
     }
 
     @Basic
-    @Column(name = "freeLocalData")
+    @Column(name = "free_message_num")
+    public Long getFreeMessageNum() {
+        return freeMessageNum;
+    }
+
+    public void setFreeMessageNum(Long freeMessageNum) {
+        this.freeMessageNum = freeMessageNum;
+    }
+
+    @Basic
+    @Column(name = "free_local_data")
     public Double getFreeLocalData() {
         return freeLocalData;
     }
@@ -85,7 +85,7 @@ public class Plan {
     }
 
     @Basic
-    @Column(name = "freeDomesticData")
+    @Column(name = "free_domestic_data")
     public Double getFreeDomesticData() {
         return freeDomesticData;
     }
@@ -110,8 +110,8 @@ public class Plan {
         return pid == plan.pid &&
                 Objects.equals(pname, plan.pname) &&
                 Objects.equals(price, plan.price) &&
-                Objects.equals(freeCall, plan.freeCall) &&
-                Objects.equals(freeMessage, plan.freeMessage) &&
+                Objects.equals(freeCallMinutes, plan.freeCallMinutes) &&
+                Objects.equals(freeMessageNum, plan.freeMessageNum) &&
                 Objects.equals(freeLocalData, plan.freeLocalData) &&
                 Objects.equals(freeDomesticData, plan.freeDomesticData);
     }
@@ -119,7 +119,7 @@ public class Plan {
     @Override
     public int hashCode() {
 
-        return Objects.hash(pid, pname, price, freeCall, freeMessage, freeLocalData, freeDomesticData);
+        return Objects.hash(pid, pname, price, freeCallMinutes, freeMessageNum, freeLocalData, freeDomesticData);
     }
 
     public void showInfo() {
@@ -131,10 +131,10 @@ public class Plan {
         StringBuilder info = new StringBuilder();
         String toPrint = "";
 
-        toPrint = freeCall!=0 ? "免费通话时长" + freeCall + "分钟" : "";
+        toPrint = freeCallMinutes!=0 ? "免费通话时长" + freeCallMinutes + "分钟" : "";
         info.append(toPrint);
 
-        toPrint = freeMessage!=0 ? "免费短信数量" + freeMessage + "条" : "";
+        toPrint = freeMessageNum!=0 ? "免费短信数量" + freeMessageNum + "条" : "";
         info.append((!info.toString().equals("")&&!toPrint.equals("")) ? ", " : "");
         info.append(toPrint);
 

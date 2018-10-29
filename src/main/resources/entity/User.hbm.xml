@@ -9,9 +9,9 @@
         <property name="uname" column="uname"/>
         <property name="balance" column="balance"/>
         <property name="province" column="province"/>
-        <property name="freeCallMinutes" column="freeCallMinutes"/>
-        <property name="freeMessageNum" column="freeMessageNum"/>
-        <property name="freeLocalData" column="freeLocalData"/>
-        <property name="freeDomesticData" column="freeDomesticData"/>
+        <property name="freeCallMinutes" column="free_call_minutes"/>
+        <property name="freeMessageNum" column="free_message_num"/>
+        <property name="freeLocalData" column="free_local_data"/>
+        <property name="freeDomesticData" column="free_domestic_data"/>
     </class>
 </hibernate-mapping>

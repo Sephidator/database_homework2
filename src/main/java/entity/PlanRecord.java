@@ -8,11 +8,11 @@ import java.util.Objects;
 @Table(name = "plan_record", schema = "homework_2", catalog = "")
 public class PlanRecord {
     private long rid;
+    private String userPhone;
+    private Long pid;
     private Date time;
     private Double expense;
     private Double refund;
-    private String userPhone;
-    private Long pid;
 
     public PlanRecord() {
     }
@@ -33,6 +33,26 @@ public class PlanRecord {
 
     public void setRid(long rid) {
         this.rid = rid;
+    }
+
+    @Basic
+    @Column(name = "user_phone")
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    @Basic
+    @Column(name = "pid")
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
     }
 
     @Basic
@@ -63,26 +83,6 @@ public class PlanRecord {
 
     public void setRefund(Double refund) {
         this.refund = refund;
-    }
-
-    @Basic
-    @Column(name = "user_phone")
-    public String getUserPhone() {
-        return userPhone;
-    }
-
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
-    }
-
-    @Basic
-    @Column(name = "pid")
-    public Long getPid() {
-        return pid;
-    }
-
-    public void setPid(Long pid) {
-        this.pid = pid;
     }
 
     @Override

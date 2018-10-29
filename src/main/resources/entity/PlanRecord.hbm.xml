@@ -6,10 +6,10 @@
 
     <class name="entity.PlanRecord" table="plan_record" schema="homework_2">
         <id name="rid" column="rid"><generator class="increment"/></id>
+        <property name="userPhone" column="user_phone"/>
+        <property name="pid" column="pid"/>
         <property name="time" column="time"/>
         <property name="expense" column="expense"/>
         <property name="refund" column="refund"/>
-        <property name="userPhone" column="user_phone"/>
-        <property name="pid" column="pid"/>
     </class>
 </hibernate-mapping>

@@ -35,7 +35,7 @@ public class DomesticDataRecord {
     }
 
     @Basic
-    @Column(name = "sendTime")
+    @Column(name = "send_time")
     public Date getSendTime() {
         return sendTime;
     }
